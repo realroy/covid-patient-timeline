@@ -16,7 +16,7 @@ export class PatientsController {
 
   @Post()
   create() {
-    return this.patientService.create()
+    return this.patientService.create({ gender: '', age: 0, occupation: '' })
   }
 
   @Put(':id')

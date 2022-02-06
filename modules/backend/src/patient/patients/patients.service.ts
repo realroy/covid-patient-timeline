@@ -10,13 +10,13 @@ export class PatientsService {
     return this.patientRepository.getMany()
   }
 
-  async create() {
+  async create(data: Omit<Patience, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>) {
     const count = await this.patientRepository.count()
     if (count >= 8) {
       throw new Error('patients reached limit')
     }
 
-    return this.patientRepository.create()
+    return this.patientRepository.create(data)
   }
 
   async isExist(options: Partial<Patience>) {

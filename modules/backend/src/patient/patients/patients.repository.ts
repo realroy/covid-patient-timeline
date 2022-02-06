@@ -10,13 +10,9 @@ export class PatientsRepository {
     return this.prismaService.patience.findMany();
   }
 
-  async create() {
+  async create(data: Omit<Patience, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>) {
     return this.prismaService.patience.create({
-      data: {
-        gender: '',
-        age: 0,
-        occupation: '',
-      },
+      data,
     });
   }
 
@@ -25,9 +21,16 @@ export class PatientsRepository {
   }
 
   async isExist(options: Partial<Patience>) {
-    const select = Object.keys(options).reduce((prev, key) => ({ ...prev, [key]: true }), {})
+    const select = Object.keys(options).reduce(
+      (prev, key) => ({ ...prev, [key]: true }),
+      {},
+    );
 
-    return this.prismaService.patience.findFirst({ select, where: options, rejectOnNotFound: true })
+    return this.prismaService.patience.findFirst({
+      select,
+      where: options,
+      rejectOnNotFound: true,
+    });
   }
 
   updateById(id: string, data: Partial<Patience>) {

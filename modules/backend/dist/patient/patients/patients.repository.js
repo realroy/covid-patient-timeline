@@ -19,13 +19,9 @@ let PatientsRepository = class PatientsRepository {
     async getMany() {
         return this.prismaService.patience.findMany();
     }
-    async create() {
+    async create(data) {
         return this.prismaService.patience.create({
-            data: {
-                gender: '',
-                age: 0,
-                occupation: '',
-            },
+            data,
         });
     }
     async count() {
@@ -33,7 +29,11 @@ let PatientsRepository = class PatientsRepository {
     }
     async isExist(options) {
         const select = Object.keys(options).reduce((prev, key) => (Object.assign(Object.assign({}, prev), { [key]: true })), {});
-        return this.prismaService.patience.findFirst({ select, where: options, rejectOnNotFound: true });
+        return this.prismaService.patience.findFirst({
+            select,
+            where: options,
+            rejectOnNotFound: true,
+        });
     }
     updateById(id, data) {
         return this.prismaService.patience.update({ where: { id }, data });

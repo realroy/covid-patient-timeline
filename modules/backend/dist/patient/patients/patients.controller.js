@@ -25,7 +25,7 @@ let PatientsController = class PatientsController {
         return this.patientService.getMany();
     }
     create() {
-        return this.patientService.create();
+        return this.patientService.create({ gender: '', age: 0, occupation: '' });
     }
     updateById(params, updatePatientDto) {
         return this.patientService.updateById(params.id, updatePatientDto);

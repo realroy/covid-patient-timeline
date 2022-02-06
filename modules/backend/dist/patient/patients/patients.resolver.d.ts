@@ -1,6 +1,10 @@
-import { PatientsRepository } from "./patients.repository";
-export default class PatientsResolver {
-    private readonly patientRepository;
-    constructor(patientRepository: PatientsRepository);
-    getMany(): Promise<import(".prisma/client").Patience[]>;
+import { PatientsService } from './patients.service';
+import { AddPatientInputType, UpdatePatientInputType } from './input-types';
+export declare class PatientsResolver {
+    private readonly patientsService;
+    constructor(patientsService: PatientsService);
+    patients(): Promise<import(".prisma/client").Patience[]>;
+    addPatient(data: AddPatientInputType): Promise<import(".prisma/client").Patience>;
+    updatePatient(data: UpdatePatientInputType): Promise<import(".prisma/client").Patience>;
+    deletePatient(id: string): Promise<import(".prisma/client").Patience>;
 }

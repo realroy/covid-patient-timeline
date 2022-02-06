@@ -3,6 +3,47 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+input AddPatientInputType {
+  age: Float
+  gender: String
+  occupation: String
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+type Mutation {
+  addPatient(data: AddPatientInputType!): Patience!
+  deletePatient(id: String!): Patience!
+  updatePatient(data: UpdatePatientInputType!): Patience!
+}
+
+type Patience {
+  _count: PatienceCount
+  age: Int!
+  createdAt: DateTime!
+  deletedAt: DateTime
+  gender: String!
+  id: String!
+  occupation: String!
+  updatedAt: DateTime!
+}
+
+type PatienceCount {
+  Timeline: Int!
+}
+
 type Query {
   helloWorld: String!
+  patients: [Patience!]!
+  timelines(patientId: String!): [Patience!]!
+}
+
+input UpdatePatientInputType {
+  age: Float
+  gender: String
+  id: String!
+  occupation: String
 }

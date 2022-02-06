@@ -1,39 +1,36 @@
-import { Injectable } from "@nestjs/common";
-import { Resolver, Query } from "type-graphql";
-import { PatientsRepository } from "./patients.repository";
+import { Injectable } from '@nestjs/common';
+import { Resolver, Query, Mutation, Arg } from 'type-graphql';
+import { Patience } from '@generated/type-graphql';
+
+import { PatientsService } from './patients.service';
+import { AddPatientInputType, UpdatePatientInputType } from './input-types';
 
 @Injectable()
 @Resolver()
-export default class PatientsResolver {
-  constructor(private readonly patientRepository: PatientsRepository) {}
+export class PatientsResolver {
+  constructor(private readonly patientsService: PatientsService) {}
 
-  @Query(returns => String)
-  async getMany() {
-    return this.patientRepository.getMany()
+  @Query((returns) => [Patience])
+  async patients() {
+    return this.patientsService.getMany();
   }
 
-  // @Query(returns => String)
-  // async create() {
-  //   const count = await this.patientRepository.count()
-  //   if (count >= 8) {
-  //     throw new Error('patients reached limit')
-  //   }
+  @Mutation((returns) => Patience)
+  async addPatient(@Arg('data') data: AddPatientInputType) {
+    return this.patientsService.create({
+      gender: data.gender,
+      age: data.age,
+      occupation: data.occupation,
+    });
+  }
 
-  //   return this.patientRepository.create()
-  // }
+  @Mutation((returns) => Patience)
+  async updatePatient(@Arg('data') data: UpdatePatientInputType) {
+    return this.patientsService.updateById(data.id, data);
+  }
 
-  // @Query(returns => String)
-  // async isExist(options: Partial<Patience>) {
-  //   return this.patientRepository.isExist(options)
-  // }
-  
-  // @Query(returns => String)
-  // async updateById(id: string, data: Partial<Patience>) {
-  //   return this.patientRepository.updateById(id, data)
-  // }
-
-  // @Query(returns => String)
-  // async deleteById(id: string) {
-  //   return this.patientRepository.deleteById(id)
-  // }
+  @Mutation((returns) => Patience)
+  async deletePatient(@Arg('id') id: string) {
+    return this.patientsService.deleteById(id);
+  }
 }

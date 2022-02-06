@@ -19,12 +19,12 @@ let PatientsService = class PatientsService {
     async getMany() {
         return this.patientRepository.getMany();
     }
-    async create() {
+    async create(data) {
         const count = await this.patientRepository.count();
         if (count >= 8) {
             throw new Error('patients reached limit');
         }
-        return this.patientRepository.create();
+        return this.patientRepository.create(data);
     }
     async isExist(options) {
         return this.patientRepository.isExist(options);

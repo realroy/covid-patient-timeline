@@ -10,16 +10,25 @@ exports.PatientModule = void 0;
 const common_1 = require("@nestjs/common");
 const patients_controller_1 = require("./patients/patients.controller");
 const patients_repository_1 = require("./patients/patients.repository");
+const patients_resolver_1 = require("./patients/patients.resolver");
 const patients_service_1 = require("./patients/patients.service");
 const timelines_controller_1 = require("./timelines/timelines.controller");
 const timelines_repository_1 = require("./timelines/timelines.repository");
+const timelines_resolver_1 = require("./timelines/timelines.resolver");
 const timelines_service_1 = require("./timelines/timelines.service");
 let PatientModule = class PatientModule {
 };
 PatientModule = __decorate([
     (0, common_1.Module)({
         controllers: [patients_controller_1.PatientsController, timelines_controller_1.TimelinesController],
-        providers: [patients_service_1.PatientsService, patients_repository_1.PatientsRepository, timelines_service_1.TimelinesService, timelines_repository_1.TimelineRepository]
+        providers: [
+            patients_service_1.PatientsService,
+            patients_repository_1.PatientsRepository,
+            timelines_service_1.TimelinesService,
+            timelines_repository_1.TimelineRepository,
+            patients_resolver_1.PatientsResolver,
+            timelines_resolver_1.TimelinesResolver
+        ],
     })
 ], PatientModule);
 exports.PatientModule = PatientModule;
