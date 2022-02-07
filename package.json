@@ -7,7 +7,6 @@
       "modules/*"
     ],
     "nohoist": [
-      "/modules/frontend/**"
     ]
   },
   "scripts": {
