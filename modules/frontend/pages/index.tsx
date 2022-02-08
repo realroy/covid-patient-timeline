@@ -1,113 +1,23 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  useQuery,
-  gql,
-  useMutation,
-} from "@apollo/client";
-import {
-  FormEventHandler,
-  MouseEventHandler,
-  useEffect,
-  useState,
-} from "react";
-import { useForm } from "react-hook-form";
-import { PatientForm } from "../components";
+import { PatientTrackerPage, TimelineFormData } from "../components";
+import { usePatientMutation, usePatientsQuery } from "../hooks";
 
 const Home: NextPage = () => {
-  const patientQuery = useQuery(gql`
-    query {
-      patients {
-        id
-        gender
-        age
-        occupation
-        createdAt
-        updatedAt
-        deletedAt
-      }
-    }
-  `);
+  const patientsQuery = usePatientsQuery();
+  const { patients = [] } = patientsQuery.data ?? {};
+  const { addPatient, updatePatient, deletePatient } = usePatientMutation();
 
-  const [addPatient, addPatientMutation] = useMutation(gql`
-    mutation AddPatient($data: AddPatientInputType!) {
-      addPatient(data: $data) {
-        id
-      }
-    }
-  `);
-
-  const [updatePatient, updatePatientMutation] = useMutation(gql`
-    mutation updatePatient($data: UpdatePatientInputType!) {
-      updatePatient(data: $data) {
-        id
-      }
-    }
-  `);
-
-  const [deletePatient, deletePatientMutation] = useMutation(gql`
-    mutation DeletePatient($id: String!) {
-      deletePatient(id: $id) {
-        id
-      }
-    }
-  `);
-
-  const { patients = [] } = patientQuery.data ?? {};
-  const [selectedTab, setSelectedTab] = useState<number | null>(null);
-  const selectedPatient = selectedTab ? patients[selectedTab] : null;
-
-  const handleAddPatientClick: MouseEventHandler = async (e) => {
-    await addPatient({
-      variables: { data: { gender: "", age: 0, occupation: "" } },
-    });
-    await patientQuery.refetch();
-
-    e.preventDefault();
+  const handleAddPatient = async (data: any) => {
+    await addPatient(data);
+    await patientsQuery.refetch();
   };
 
-  const handleRemovePatientClick: MouseEventHandler<HTMLButtonElement> = async (
-    e
-  ) => {
-    // @ts-ignore
-    const { dataset = {} } = e.target;
-    const { patientId } = dataset;
-
-    if (patientId) {
-      await deletePatient({ variables: { id: patientId } });
-      await patientQuery.refetch();
-    }
-
-    e.preventDefault();
+  const handleDeletePatient = async (data: any) => {
+    await deletePatient(data);
+    await patientsQuery.refetch();
   };
-
-  const handlePatientSelect: MouseEventHandler<HTMLButtonElement> = (e) => {
-    // @ts-ignore
-    const { dataset = {} } = e.currentTarget;
-    const index = dataset.index;
-    console.log({ index });
-
-    if (index) {
-      setSelectedTab(+index);
-    }
-
-    e.preventDefault();
-  };
-
-  const onPatientInfoSubmit = async (data: any) => {
-    const { id } = selectedPatient;
-    await updatePatient({
-      variables: { data: { ...data, age: parseInt(data.age, 10), id: id } },
-    });
-    await patientQuery.refetch();
-  };
-
-  console.log({ selectedPatient });
 
   return (
     <div className={styles.container}>
@@ -117,30 +27,19 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <h1 className={styles.title}>Covid Tracker</h1>
-        {patients.map((patient, index) => (
-          <button
-            key={patient.id}
-            data-index={index}
-            onClick={handlePatientSelect}
-          >
-            <div>Patient</div>
-            <div>{index + 1}</div>
-          </button>
-        ))}
-        <button onClick={handleAddPatientClick}>+</button>
-        {selectedPatient && (
-          <PatientForm
-            patientId={selectedPatient.id}
-            onSubmit={onPatientInfoSubmit}
-            onRemoveClick={handleRemovePatientClick}
-            gender={selectedPatient.gender}
-            age={selectedPatient.age}
-            occupation={selectedPatient.occupation}
-          />
-        )}
-      </main>
+      <PatientTrackerPage
+        patients={patients}
+        selectedPatient={null}
+        addPatient={handleAddPatient}
+        deletePatient={handleDeletePatient}
+        updatePatient={updatePatient}
+        onTimelineDelete={function (id: string) {
+          throw new Error("Function not implemented.");
+        }}
+        onTimelineSubmit={function (data: TimelineFormData) {
+          throw new Error("Function not implemented.");
+        }}
+      />
     </div>
   );
 };

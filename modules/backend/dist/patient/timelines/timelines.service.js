@@ -25,15 +25,6 @@ let TimelinesService = class TimelinesService {
         return this.timelineRepository.create(args);
     }
     async getMany(args) {
-        try {
-            await this.patientRepository.isExist({ id: args.patientId });
-        }
-        catch (error) {
-            if (error.name === 'NotFoundError') {
-                throw new common_1.NotFoundException();
-            }
-            throw error;
-        }
         return this.timelineRepository.getMany(args);
     }
 };

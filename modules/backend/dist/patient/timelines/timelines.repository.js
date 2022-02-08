@@ -33,13 +33,7 @@ let TimelineRepository = class TimelineRepository {
                 },
             ],
         });
-        const dateSet = [
-            ...new Set(timelines.map((timeline) => timeline.from.toDateString())),
-        ];
-        return dateSet.map((date) => [
-            date,
-            timelines.filter((timeline) => timeline.from.toDateString() === date),
-        ]);
+        return timelines;
     }
 };
 TimelineRepository = __decorate([

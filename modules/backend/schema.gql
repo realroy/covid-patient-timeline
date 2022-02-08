@@ -9,6 +9,15 @@ input AddPatientInputType {
   occupation: String
 }
 
+input AddTimelineInputType {
+  detail: String!
+  from: DateTime!
+  locationName: String!
+  locationType: String!
+  patienceId: String!
+  to: DateTime!
+}
+
 """
 The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
@@ -16,7 +25,9 @@ scalar DateTime
 
 type Mutation {
   addPatient(data: AddPatientInputType!): Patience!
+  addTimeline(data: AddTimelineInputType!): Timeline!
   deletePatient(id: String!): Patience!
+  removeTimeline(id: String!): Timeline!
   updatePatient(data: UpdatePatientInputType!): Patience!
 }
 
@@ -37,8 +48,22 @@ type PatienceCount {
 
 type Query {
   helloWorld: String!
+  patient(id: String!): Patience!
   patients: [Patience!]!
-  timelines(patientId: String!): [Patience!]!
+  timelines(patientId: String!): [Timeline!]!
+}
+
+type Timeline {
+  createdAt: DateTime!
+  deletedAt: DateTime
+  detail: String!
+  from: DateTime!
+  id: String!
+  locationName: String!
+  locationType: String!
+  patienceId: String!
+  to: DateTime!
+  updatedAt: DateTime!
 }
 
 input UpdatePatientInputType {

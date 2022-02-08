@@ -4,10 +4,15 @@ import { PatientsRepository } from './patients.repository';
 
 @Injectable()
 export class PatientsService {
+  
   constructor(private readonly patientRepository: PatientsRepository) {}
 
   async getMany() {
     return this.patientRepository.getMany()
+  }
+
+  getOneById(id: string) {
+    return this.patientRepository.getOneById(id)
   }
 
   async create(data: Omit<Patience, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>) {

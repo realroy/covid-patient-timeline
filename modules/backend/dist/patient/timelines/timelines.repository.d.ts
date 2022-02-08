@@ -6,5 +6,5 @@ export declare class TimelineRepository {
     constructor(prismaService: PrismaService);
     deleteById(id: string): import(".prisma/client").Prisma.Prisma__TimelineClient<import(".prisma/client").Timeline>;
     create(args: TimelinesCreateOptions): import(".prisma/client").Prisma.Prisma__TimelineClient<import(".prisma/client").Timeline>;
-    getMany(args: TimelinesServiceGetManyOptions): Promise<(string | import(".prisma/client").Timeline[])[][]>;
+    getMany(args: TimelinesServiceGetManyOptions): Promise<import(".prisma/client").Timeline[]>;
 }

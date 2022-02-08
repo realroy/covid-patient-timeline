@@ -17,13 +17,16 @@ const common_1 = require("@nestjs/common");
 const type_graphql_1 = require("type-graphql");
 const type_graphql_2 = require("@generated/type-graphql");
 const patients_service_1 = require("./patients.service");
-const input_types_1 = require("./input-types");
+const types_1 = require("./types");
 let PatientsResolver = class PatientsResolver {
     constructor(patientsService) {
         this.patientsService = patientsService;
     }
     async patients() {
         return this.patientsService.getMany();
+    }
+    async patient(id) {
+        return this.patientsService.getOneById(id);
     }
     async addPatient(data) {
         return this.patientsService.create({
@@ -46,17 +49,24 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PatientsResolver.prototype, "patients", null);
 __decorate([
+    (0, type_graphql_1.Query)((returns) => type_graphql_2.Patience),
+    __param(0, (0, type_graphql_1.Arg)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], PatientsResolver.prototype, "patient", null);
+__decorate([
     (0, type_graphql_1.Mutation)((returns) => type_graphql_2.Patience),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [input_types_1.AddPatientInputType]),
+    __metadata("design:paramtypes", [types_1.AddPatientInputType]),
     __metadata("design:returntype", Promise)
 ], PatientsResolver.prototype, "addPatient", null);
 __decorate([
     (0, type_graphql_1.Mutation)((returns) => type_graphql_2.Patience),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [input_types_1.UpdatePatientInputType]),
+    __metadata("design:paramtypes", [types_1.UpdatePatientInputType]),
     __metadata("design:returntype", Promise)
 ], PatientsResolver.prototype, "updatePatient", null);
 __decorate([

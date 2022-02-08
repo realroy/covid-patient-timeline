@@ -3,7 +3,7 @@ import { Resolver, Query, Mutation, Arg } from 'type-graphql';
 import { Patience } from '@generated/type-graphql';
 
 import { PatientsService } from './patients.service';
-import { AddPatientInputType, UpdatePatientInputType } from './input-types';
+import { AddPatientInputType, UpdatePatientInputType } from './types';
 
 @Injectable()
 @Resolver()
@@ -13,6 +13,11 @@ export class PatientsResolver {
   @Query((returns) => [Patience])
   async patients() {
     return this.patientsService.getMany();
+  }
+
+  @Query((returns) => Patience)
+  async patient(@Arg('id') id: string) {
+    return this.patientsService.getOneById(id)
   }
 
   @Mutation((returns) => Patience)

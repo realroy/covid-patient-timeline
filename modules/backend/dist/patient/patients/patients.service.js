@@ -19,6 +19,9 @@ let PatientsService = class PatientsService {
     async getMany() {
         return this.patientRepository.getMany();
     }
+    getOneById(id) {
+        return this.patientRepository.getOneById(id);
+    }
     async create(data) {
         const count = await this.patientRepository.count();
         if (count >= 8) {

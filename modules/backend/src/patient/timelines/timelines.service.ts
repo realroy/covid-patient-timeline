@@ -22,15 +22,15 @@ export class TimelinesService {
   }
 
   async getMany(args: TimelinesServiceGetManyOptions) {
-    try {
-      await this.patientRepository.isExist({ id: args.patientId })
-    } catch (error) {
-      if (error.name === 'NotFoundError') {
-        throw new NotFoundException()
-      }
+    // try {
+    //   await this.patientRepository.isExist({ id: args.patientId })
+    // } catch (error) {
+    //   if (error.name === 'NotFoundError') {
+    //     throw new NotFoundException()
+    //   }
 
-      throw error
-    }
+    //   throw error
+    // }
 
     return this.timelineRepository.getMany(args);
   }

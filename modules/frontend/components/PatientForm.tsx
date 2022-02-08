@@ -8,20 +8,20 @@ export type PatientFormData = {
 };
 
 export type PatientFormProps = {
-  patientId: string;
+  patientId?: string;
   onSubmit: (data: PatientFormData) => any;
   onRemoveClick: MouseEventHandler;
-} & PatientFormData;
+} & Partial<PatientFormData>;
 
 export const PatientForm: FC<PatientFormProps> = (props) => {
-  const { gender, occupation, age, patientId } = props
+  const { gender = 'male', occupation = '', age = 0, patientId } = props
   const {
     register,
     handleSubmit,
     watch,
     setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm<PatientFormData>();
 
   useEffect(() => {
     setValue('gender', gender)

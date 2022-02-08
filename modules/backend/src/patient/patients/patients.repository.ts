@@ -10,6 +10,10 @@ export class PatientsRepository {
     return this.prismaService.patience.findMany();
   }
 
+  getOneById(id: string) {
+    return this.prismaService.patience.findFirst({ where: { id } })
+  }
+
   async create(data: Omit<Patience, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>) {
     return this.prismaService.patience.create({
       data,

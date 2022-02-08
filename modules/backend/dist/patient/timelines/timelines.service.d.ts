@@ -11,5 +11,5 @@ export declare class TimelinesService {
     constructor(timelineRepository: TimelineRepository, patientRepository: PatientsRepository);
     deleteById(id: string): Prisma.Prisma__TimelineClient<Timeline>;
     create(args: TimelinesCreateOptions): Prisma.Prisma__TimelineClient<Timeline>;
-    getMany(args: TimelinesServiceGetManyOptions): Promise<(string | Timeline[])[][]>;
+    getMany(args: TimelinesServiceGetManyOptions): Promise<Timeline[]>;
 }

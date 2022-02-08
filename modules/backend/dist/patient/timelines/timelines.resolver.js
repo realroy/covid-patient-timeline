@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const type_graphql_1 = require("type-graphql");
 const type_graphql_2 = require("@generated/type-graphql");
 const timelines_service_1 = require("./timelines.service");
+const types_1 = require("./types");
 let TimelinesResolver = class TimelinesResolver {
     constructor(timelinesService) {
         this.timelinesService = timelinesService;
@@ -24,14 +25,34 @@ let TimelinesResolver = class TimelinesResolver {
     async timelines(patientId) {
         return this.timelinesService.getMany({ patientId });
     }
+    async removeTimeline(id) {
+        return this.timelinesService.deleteById(id);
+    }
+    async addTimeline(data) {
+        return this.timelinesService.create(data);
+    }
 };
 __decorate([
-    (0, type_graphql_1.Query)((returns) => [type_graphql_2.Patience]),
+    (0, type_graphql_1.Query)((returns) => [type_graphql_2.Timeline]),
     __param(0, (0, type_graphql_1.Arg)('patientId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], TimelinesResolver.prototype, "timelines", null);
+__decorate([
+    (0, type_graphql_1.Mutation)((returns) => type_graphql_2.Timeline),
+    __param(0, (0, type_graphql_1.Arg)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], TimelinesResolver.prototype, "removeTimeline", null);
+__decorate([
+    (0, type_graphql_1.Mutation)((returns) => type_graphql_2.Timeline),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [types_1.AddTimelineInputType]),
+    __metadata("design:returntype", Promise)
+], TimelinesResolver.prototype, "addTimeline", null);
 TimelinesResolver = __decorate([
     (0, common_1.Injectable)(),
     (0, type_graphql_1.Resolver)(),

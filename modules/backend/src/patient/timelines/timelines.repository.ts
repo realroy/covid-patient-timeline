@@ -25,13 +25,18 @@ export class TimelineRepository {
       ],
     });
 
-    const dateSet = [
-      ...new Set(timelines.map((timeline) => timeline.from.toDateString())),
-    ];
+    return timelines
 
-    return dateSet.map((date) => [
-      date,
-      timelines.filter((timeline) => timeline.from.toDateString() === date),
-    ]);
+    // const dateSet = [
+    //   ...new Set(timelines.map((timeline) => timeline.from.toDateString())),
+    // ];
+
+    // const result = dateSet.map((date) => [
+    //   date,
+    //   timelines.filter((timeline) => timeline.from.toDateString() === date),
+    // ]);
+
+    // console.log({result})
+    // return result
   }
 }

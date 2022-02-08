@@ -4,6 +4,7 @@ export declare class PatientsRepository {
     private readonly prismaService;
     constructor(prismaService: PrismaService);
     getMany(): Promise<import(".prisma/client").Patience[]>;
+    getOneById(id: string): import(".prisma/client").Prisma.Prisma__PatienceClient<import(".prisma/client").Patience>;
     create(data: Omit<Patience, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>): Promise<import(".prisma/client").Patience>;
     count(): Promise<number>;
     isExist(options: Partial<Patience>): Promise<{}>;

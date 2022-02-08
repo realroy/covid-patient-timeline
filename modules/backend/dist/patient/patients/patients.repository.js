@@ -19,6 +19,9 @@ let PatientsRepository = class PatientsRepository {
     async getMany() {
         return this.prismaService.patience.findMany();
     }
+    getOneById(id) {
+        return this.prismaService.patience.findFirst({ where: { id } });
+    }
     async create(data) {
         return this.prismaService.patience.create({
             data,
