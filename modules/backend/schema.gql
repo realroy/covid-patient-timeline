@@ -47,7 +47,9 @@ type PatienceCount {
 }
 
 type Query {
+  genders: [[String!]!]!
   helloWorld: String!
+  locationTypes: [[String!]!]!
   patient(id: String!): Patience!
   patients: [Patience!]!
   timelines(patientId: String!): [Timeline!]!

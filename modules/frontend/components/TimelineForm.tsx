@@ -2,16 +2,16 @@ import { FC, MouseEventHandler, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 export type TimelineFormData = {
-  from: Date;
-  to: Date;
+  from: string;
+  to: string;
   detail: string;
   locationType: string;
   locationName: string;
 };
 
 export type TimelineFormProps = {
-  onSubmit: (data: TimelineFormData) => any;
-  locationTypes: string[];
+  onSubmit?: (data: TimelineFormData) => any;
+  locationTypes: [string, string][];
 };
 
 export const TimelineForm: FC<TimelineFormProps> = (props) => {
@@ -21,9 +21,16 @@ export const TimelineForm: FC<TimelineFormProps> = (props) => {
     formState: { errors },
   } = useForm<TimelineFormData>();
 
+  const onSubmit = handleSubmit((data) => {
+    data.to = data.from.replace(/\d[4]-\d[2]-\d[2]-T/, data.to)
+    // data.to = new Date([data.from.toDateString(), data.to.toTimeString()].join(' '))
+
+    props?.onSubmit?.(data);
+  });
+
   return (
     <div>
-      <form onSubmit={handleSubmit(props.onSubmit)}>
+      <form onSubmit={onSubmit}>
         <label htmlFor="">From</label>
         <input type="datetime-local" id="from" {...register("from")} />
 
@@ -39,10 +46,10 @@ export const TimelineForm: FC<TimelineFormProps> = (props) => {
         ></textarea>
 
         <label htmlFor="">Location Type</label>
-        <select id="location-type">
-          {props.locationTypes.map((locationType) => (
-            <option key={locationType} value={locationType}>
-              {locationType}
+        <select id="location-type" {...register('locationType')}>
+          {props.locationTypes.map(([key, value]) => (
+            <option key={key} value={key}>
+              {value}
             </option>
           ))}
         </select>

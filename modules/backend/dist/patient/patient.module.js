@@ -8,6 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PatientModule = void 0;
 const common_1 = require("@nestjs/common");
+const genders_resolver_1 = require("./genders/genders.resolver");
+const location_types_resolver_1 = require("./location-types/location-types.resolver");
 const patients_controller_1 = require("./patients/patients.controller");
 const patients_repository_1 = require("./patients/patients.repository");
 const patients_resolver_1 = require("./patients/patients.resolver");
@@ -27,7 +29,9 @@ PatientModule = __decorate([
             timelines_service_1.TimelinesService,
             timelines_repository_1.TimelineRepository,
             patients_resolver_1.PatientsResolver,
-            timelines_resolver_1.TimelinesResolver
+            timelines_resolver_1.TimelinesResolver,
+            location_types_resolver_1.LocationTypesResolver,
+            genders_resolver_1.GendersResolver
         ],
     })
 ], PatientModule);

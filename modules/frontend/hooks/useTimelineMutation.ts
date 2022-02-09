@@ -1,24 +1,24 @@
 import { gql, useMutation } from "@apollo/client";
 
 export const useTimelineMutation = () => {
-  const [addTimeline] = useMutation(gql`
-    mutation AddTimeline(data: AddPatientInputType!) {
-      addPatient(data: AddPatientInputType!) {
+  const [_addTimeline] = useMutation(gql`
+    mutation AddTimeline($data: AddTimelineInputType!) {
+      addTimeline(data: $data) {
         id
       }
     }
   `);
 
-  const [removeTimeline] = useMutation(gql`
-    mutation RemoveTimeline(id: String!) {
-      removeTimeline(id: String!): {
+  const [_removeTimeline] = useMutation(gql`
+    mutation RemoveTimeline($id: String!) {
+      removeTimeline(id: $id) {
         id
       }
-    } 
+    }
   `);
 
   return {
-    addTimeline,
-    removeTimeline,
+    addTimeline: (variables: any) => _addTimeline({ variables }),
+    removeTimeline: (variables: any) => _removeTimeline({ variables }),
   };
 };

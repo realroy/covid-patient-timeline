@@ -17,28 +17,15 @@ export type PatientTrackerPageProps = {
     gender: string;
   } | null;
   addPatient: (data: { data: any }) => any;
-  deletePatient: (data: { id: string }) => any;
-  updatePatient: (data: { data: any }) => any;
-  onTimelineDelete: (id: string) => any;
-  onTimelineSubmit: (data: TimelineFormData) => any;
-  locationTypes?: string[] | null;
+  deletePatient?: (data: { id: string }) => any;
+  updatePatient?: (data: { data: any }) => any;
+  onTimelineDelete?: (id: string) => any;
+  onTimelineSubmit?: (data: TimelineFormData) => any;
+  locationTypes?: [string, string][] | null;
   timelines?: any[] | null;
 };
 
 export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
-  // const patientQuery = usePatientQuery()
-  // const { addPatient, updatePatient, deletePatient } = usePatientMutation()
-
-  // const { patients = [] } = patientQuery.data ?? {};
-
-  // const [selectedTab, setSelectedTab] = useState<number | null>(
-  //   patients.length ? 0 : null
-  // );
-
-  // const selectedPatient = selectedTab !== null ? patients[selectedTab] : null;
-
-  // const timelineQuery = useTimelineQuery(selectedPatient?.id)
-
   const handleAddPatientClick: MouseEventHandler = async (e) => {
     await props.addPatient({ data: { gender: "", age: 0, occupation: "" } });
     e.preventDefault();
@@ -52,7 +39,7 @@ export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
     const { patientId } = dataset;
 
     if (patientId) {
-      await props.deletePatient({ id: patientId });
+      await props.deletePatient?.({ id: patientId });
     }
 
     e.preventDefault();
@@ -60,7 +47,7 @@ export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
 
   const onPatientInfoSubmit = async (data: any) => {
     const { id } = props.selectedPatient ?? {};
-    await props.updatePatient({
+    await props.updatePatient?.({
       data: { ...data, age: parseInt(data.age, 10), id: id },
     });
   };
@@ -72,7 +59,7 @@ export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
         patients={props.patients}
         handleAddClick={handleAddPatientClick}
       />
-      <div>
+      {props.selectedPatient && <div>
         <PatientForm
           patientId={props.selectedPatient?.id}
           onSubmit={onPatientInfoSubmit}
@@ -86,13 +73,13 @@ export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
           patientAge={props.selectedPatient?.age}
           patientGender={props.selectedPatient?.gender}
           patientOccupation={props.selectedPatient?.occupation}
-          onTimelineDelete={props.onTimelineDelete}
+          onTimelineDelete={props?.onTimelineDelete}
         />
         <TimelineForm
-          onSubmit={props.onTimelineSubmit}
+          onSubmit={props?.onTimelineSubmit}
           locationTypes={props.locationTypes ?? []}
         />
-      </div>
+      </div>}
     </main>
   );
 };

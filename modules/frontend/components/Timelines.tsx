@@ -3,15 +3,15 @@ import { TimelineItem } from "./TimelineItem";
 
 type Timeline = {
   id: string;
-  from: Date;
-  to: Date;
+  from: string;
+  to: string;
   detail: string;
   locationType: string;
   locationName: string;
 };
 
 export type TimelinesProps = {
-  onTimelineDelete: (id: string) => any;
+  onTimelineDelete?: (id: string) => any;
   patientGender?: string;
   patientAge?: number;
   patientOccupation?: string;
@@ -43,7 +43,7 @@ export const Timelines: FC<TimelinesProps> = (props) => {
           locationType={timeline.locationType}
           detail={timeline.detail}
           timelineId={timeline.id}
-          onDeleteClick={props.onTimelineDelete}
+          onDeleteClick={props?.onTimelineDelete}
         />
       ))}
 

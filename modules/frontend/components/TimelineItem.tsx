@@ -1,22 +1,22 @@
 import { FC, MouseEventHandler } from "react";
 
 export type TimelineItemProps = {
-  from: Date;
-  to: Date;
+  from: string;
+  to: string;
   detail: string;
   locationType: string;
   locationName: string;
   timelineId: string
-  onDeleteClick: (id: string) => any;
+  onDeleteClick?: (id: string) => any;
 };
 
 export const TimelineItem: FC<TimelineItemProps> = (props) => {
-  const handleDeleteClick: MouseEventHandler = (_) => props.onDeleteClick(props.timelineId)
+  const handleDeleteClick: MouseEventHandler = (_) => props.onDeleteClick?.(props.timelineId)
   
   return (
     <div>
       <div>
-        {props.from.getTime()} - {props.to.getTime()}
+        {props.from} - {props.to}
       </div>
       <div>
         <div>{props.detail}</div>

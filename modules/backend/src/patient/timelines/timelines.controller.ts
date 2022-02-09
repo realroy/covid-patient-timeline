@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 
 import { FindOneParamsDto } from '../dto';
-import { PatientsService } from '../patients/patients.service';
 import { CreateTimelineDto } from './dto';
 import { TimelinesService } from './timelines.service';
 

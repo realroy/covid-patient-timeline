@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 
-export const useTimelineQuery = (patienceId: string) =>
+export const useTimelineQuery = (patientId: string) =>
   useQuery(
     gql`
       query Timeline($patientId: String!) {
@@ -14,5 +14,5 @@ export const useTimelineQuery = (patienceId: string) =>
         }
       }
     `,
-    { variables: { patienceId } }
+    { variables: { patientId } }
   );

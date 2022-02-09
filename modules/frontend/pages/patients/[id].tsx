@@ -1,14 +1,16 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, useEffect } from "react";
 import { PatientTrackerPage, TimelineFormData } from "../../components";
 import {
+  useLocationTypesQuery,
   usePatientMutation,
   usePatientQuery,
   usePatientsQuery,
   useTimelineQuery,
 } from "../../hooks";
+import { useTimelineMutation } from "../../hooks/useTimelineMutation";
 
 const PatientDetailNextPage: NextPage = (props) => {
   const router = useRouter();
@@ -17,9 +19,14 @@ const PatientDetailNextPage: NextPage = (props) => {
   const patientsQuery = usePatientsQuery();
   const patientQuery = usePatientQuery(patientId as string);
   const { addPatient, updatePatient, deletePatient } = usePatientMutation();
+  const timelineQuery = useTimelineQuery(patientId as string)
+  const { addTimeline, removeTimeline } = useTimelineMutation()
+  const locationTypesQuery = useLocationTypesQuery()
 
   const { patients = [] } = patientsQuery.data ?? {};
   const { patient: selectedPatient } = patientQuery.data ?? {};
+  const { timelines = [] } = timelineQuery.data ?? {}
+  const { locationTypes } = locationTypesQuery.data ?? {}
 
   const handleAddPatient = async (data: any) => {
     await addPatient(data);
@@ -29,7 +36,24 @@ const PatientDetailNextPage: NextPage = (props) => {
   const handleDeletePatient = async (data: any) => {
     await deletePatient(data);
     await patientsQuery.refetch();
+    router.push("/");
   };
+
+  const handleUpdatePatient = async (data: any) => {
+    await updatePatient(data);
+    await patientsQuery.refetch();
+  };
+
+  const handleRemoveTimeline = async (id: string) => {
+    await removeTimeline({ id })
+    await timelineQuery.refetch()
+  }
+
+  const handleAddTimeline = async (data: any) => {
+    console.log(data)
+    await addTimeline({ data: {...data, patienceId: patientId} })
+    await timelineQuery.refetch()
+  }
 
   return (
     <div>
@@ -44,13 +68,11 @@ const PatientDetailNextPage: NextPage = (props) => {
         selectedPatient={selectedPatient}
         addPatient={handleAddPatient}
         deletePatient={handleDeletePatient}
-        updatePatient={updatePatient}
-        onTimelineDelete={function (id: string) {
-          throw new Error("Function not implemented.");
-        }}
-        onTimelineSubmit={function (data: TimelineFormData) {
-          throw new Error("Function not implemented.");
-        }}
+        updatePatient={handleUpdatePatient}
+        timelines={timelines}
+        onTimelineDelete={handleRemoveTimeline}
+        onTimelineSubmit={handleAddTimeline}
+        locationTypes={locationTypes}
       />
     </div>
   );

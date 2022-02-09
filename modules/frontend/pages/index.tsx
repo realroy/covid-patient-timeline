@@ -7,15 +7,10 @@ import { usePatientMutation, usePatientsQuery } from "../hooks";
 const Home: NextPage = () => {
   const patientsQuery = usePatientsQuery();
   const { patients = [] } = patientsQuery.data ?? {};
-  const { addPatient, updatePatient, deletePatient } = usePatientMutation();
+  const { addPatient } = usePatientMutation();
 
   const handleAddPatient = async (data: any) => {
     await addPatient(data);
-    await patientsQuery.refetch();
-  };
-
-  const handleDeletePatient = async (data: any) => {
-    await deletePatient(data);
     await patientsQuery.refetch();
   };
 
@@ -31,14 +26,6 @@ const Home: NextPage = () => {
         patients={patients}
         selectedPatient={null}
         addPatient={handleAddPatient}
-        deletePatient={handleDeletePatient}
-        updatePatient={updatePatient}
-        onTimelineDelete={function (id: string) {
-          throw new Error("Function not implemented.");
-        }}
-        onTimelineSubmit={function (data: TimelineFormData) {
-          throw new Error("Function not implemented.");
-        }}
       />
     </div>
   );
