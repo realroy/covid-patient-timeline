@@ -7,7 +7,7 @@ export class PatientsRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async getMany() {
-    return this.prismaService.patience.findMany();
+    return this.prismaService.patience.findMany({ orderBy: { createdAt: 'asc' } });
   }
 
   getOneById(id: string) {

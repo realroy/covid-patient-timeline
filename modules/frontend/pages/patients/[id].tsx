@@ -36,6 +36,10 @@ const PatientDetailNextPage: NextPage = (props) => {
   const handleDeletePatient = async (data: any) => {
     await deletePatient(data);
     await patientsQuery.refetch();
+    if (patients[0]) {
+      router.push(`/patients/${patients[0].id}`);
+      return
+    }
     router.push("/");
   };
 

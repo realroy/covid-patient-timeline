@@ -1,4 +1,6 @@
 import { FC, MouseEventHandler } from "react";
+import { Box, Container, Tabs, Flex } from "@chakra-ui/react";
+
 import {
   PatientForm,
   PatientTabs,
@@ -53,33 +55,47 @@ export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
   };
 
   return (
-    <main>
-      <h1>Covid Tracker</h1>
-      <PatientTabs
-        patients={props.patients}
-        handleAddClick={handleAddPatientClick}
-      />
-      {props.selectedPatient && <div>
-        <PatientForm
-          patientId={props.selectedPatient?.id}
-          onSubmit={onPatientInfoSubmit}
-          onRemoveClick={handleRemovePatientClick}
-          gender={props.selectedPatient?.gender}
-          age={props.selectedPatient?.age}
-          occupation={props.selectedPatient?.occupation}
-        />
-        <Timelines
-          timelines={props.timelines ?? []}
-          patientAge={props.selectedPatient?.age}
-          patientGender={props.selectedPatient?.gender}
-          patientOccupation={props.selectedPatient?.occupation}
-          onTimelineDelete={props?.onTimelineDelete}
-        />
-        <TimelineForm
-          onSubmit={props?.onTimelineSubmit}
-          locationTypes={props.locationTypes ?? []}
-        />
-      </div>}
-    </main>
+    <Box as="main">
+      <Container maxW="container.xl">
+        <Box textStyle={"h1"} fontSize="4xl" textAlign="center">
+          Covid Tracker
+        </Box>
+        <Tabs variant="enclosed" isFitted>
+          <PatientTabs
+            patients={props.patients}
+            handleAddClick={handleAddPatientClick}
+          />
+          {props.selectedPatient && (
+            <div>
+              <PatientForm
+                patientId={props.selectedPatient?.id}
+                onSubmit={onPatientInfoSubmit}
+                onRemoveClick={handleRemovePatientClick}
+                gender={props.selectedPatient?.gender}
+                age={props.selectedPatient?.age}
+                occupation={props.selectedPatient?.occupation}
+              />
+              <Flex flexDirection={{ base: 'column', md: 'row' }}>
+                <Box flex="1">
+                  <Timelines
+                    timelines={props.timelines ?? []}
+                    patientAge={props.selectedPatient?.age}
+                    patientGender={props.selectedPatient?.gender}
+                    patientOccupation={props.selectedPatient?.occupation}
+                    onTimelineDelete={props?.onTimelineDelete}
+                  />
+                </Box>
+                <Box flex="1">
+                  <TimelineForm
+                    onSubmit={props?.onTimelineSubmit}
+                    locationTypes={props.locationTypes ?? []}
+                  />
+                </Box>
+              </Flex>
+            </div>
+          )}
+        </Tabs>
+      </Container>
+    </Box>
   );
 };

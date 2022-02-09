@@ -1,5 +1,16 @@
 import { FC, MouseEventHandler, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import {
+  Input,
+  Button,
+  FormControl,
+  FormLabel,
+  Select,
+  Text,
+  Box,
+  Textarea,
+  Grid,
+} from "@chakra-ui/react";
 
 export type TimelineFormData = {
   from: string;
@@ -18,11 +29,12 @@ export const TimelineForm: FC<TimelineFormProps> = (props) => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<TimelineFormData>();
 
   const onSubmit = handleSubmit((data) => {
-    data.to = data.from.replace(/\d[4]-\d[2]-\d[2]-T/, data.to)
+    data.to = data.from.replace(/\d{2}:\d{2}$/, data.to);
     // data.to = new Date([data.from.toDateString(), data.to.toTimeString()].join(' '))
 
     props?.onSubmit?.(data);
@@ -31,33 +43,43 @@ export const TimelineForm: FC<TimelineFormProps> = (props) => {
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <label htmlFor="">From</label>
-        <input type="datetime-local" id="from" {...register("from")} />
+        <Grid templateColumns="4fr 2fr" columnGap={"16px"}>
+          <div>
+            <FormLabel htmlFor="">From</FormLabel>
+            <Input type="datetime-local" id="from" {...register("from")} />
+          </div>
+          <div>
+            <FormLabel htmlFor="">To</FormLabel>
+            <Input type="time" id="from" {...register("to", { min: new Date(watch('from')).toTimeString() })} />
+          </div>
+        </Grid>
 
-        <label htmlFor="">To</label>
-        <input type="time" id="from" {...register("to")} />
-
-        <label htmlFor="Detail"></label>
-        <textarea
+        <FormLabel>Detail</FormLabel>
+        <Textarea
           id="detail"
           cols={30}
           rows={10}
           {...register("detail")}
-        ></textarea>
+        ></Textarea>
 
-        <label htmlFor="">Location Type</label>
-        <select id="location-type" {...register('locationType')}>
-          {props.locationTypes.map(([key, value]) => (
-            <option key={key} value={key}>
-              {value}
-            </option>
-          ))}
-        </select>
-
-        <label htmlFor="">Location Name</label>
-        <input type="text" {...register("locationName")} />
-
-        <input type="submit" value="Add Entry +" />
+        <Grid templateColumns="2fr 4fr" columnGap={"16px"}>
+          <div>
+            <FormLabel htmlFor="">Location Type</FormLabel>
+            <Select id="location-type" {...register("locationType")} textTransform='capitalize'>
+              {props.locationTypes.map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ))}
+            </Select>
+          </div>
+          <div>
+            <FormLabel htmlFor="">Location Name</FormLabel>
+            <Input type="text" {...register("locationName")} />
+          </div>
+        </Grid>
+        <Box height={'32px'} />
+        <Button type="submit" bg="teal" color="white">Add Entry +</Button>
       </form>
     </div>
   );
