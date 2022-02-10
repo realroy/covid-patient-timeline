@@ -10,7 +10,7 @@ export type PatientTabsProps = {
 
 export const PatientTabs: FC<PatientTabsProps> = (props) => {
   return (
-    <Flex justifyContent={'space-between'}>
+    <Flex justifyContent={'space-between'} overflowX="scroll" overflowY={'hidden'}>
       <TabList>
         {props.patients.map((patient, index: number) => (
           <Link key={patient.id} href={`/patients/${patient.id}`} passHref>

@@ -1,6 +1,14 @@
 import { FC, MouseEventHandler, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Box, Button, Flex, Select, Input } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Select,
+  Input,
+  FormLabel,
+  FormControl,
+} from "@chakra-ui/react";
 
 export type PatientFormData = {
   gender: string;
@@ -22,7 +30,11 @@ export const PatientForm: FC<PatientFormProps> = (props) => {
     watch,
     setValue,
     formState: { errors },
-  } = useForm<PatientFormData>();
+  } = useForm<PatientFormData>({
+    defaultValues: {
+      gender: "male",
+    },
+  });
 
   useEffect(() => {
     setValue("gender", gender);
@@ -40,39 +52,44 @@ export const PatientForm: FC<PatientFormProps> = (props) => {
           data-patient-id={props.patientId}
           onClick={props.onRemoveClick}
           colorScheme="red"
-          variant={'outline'}
+          variant={"outline"}
         >
-          Remove Patient
+          Remove
         </Button>
       </Flex>
-      <Box as="form" onSubmit={handleSubmit(props.onSubmit)}>
-        <Flex>
-          <span>
-            <label>Gender</label>
-
-            <div>
-              <Select id="gender" {...register("gender")}>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="prefer-not-to-say">Prefer not to say</option>
-              </Select>
-            </div>
-          </span>
-          <span>
-            <label>Age</label>
-
-            <div>
-              <Input type="number" id="age" {...register("age")} />
-            </div>
-          </span>
-          <span>
-            <label htmlFor="occupation">Occupation</label>
-
-            <div>
-              <Input type="text" id="occupation" {...register("occupation")} />
-            </div>
-          </span>
-        </Flex>
+      <Box as="form" onSubmit={handleSubmit(props.onSubmit)} width="100%">
+        <Box
+          display={{ base: "block", md: "grid" }}
+          gridTemplateColumns="3fr 1fr 6fr"
+          gap="8px"
+          py="16px"
+        >
+          <FormControl>
+            <FormLabel>Gender</FormLabel>
+            <Select id="gender" {...register("gender", { required: true })}>
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="prefer-not-to-say">Prefer not to say</option>
+            </Select>
+          </FormControl>
+          <FormControl>
+            <FormLabel>Age</FormLabel>
+            <Input
+              type="number"
+              id="age"
+              {...register("age", { required: true, min: 0 })}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="occupation">Occupation</FormLabel>
+            <Input
+              type="text"
+              id="occupation"
+              {...register("occupation", { required: true, minLength: 1 })}
+            />
+          </FormControl>
+        </Box>
         <Button type="submit">Update</Button>
       </Box>
     </Box>

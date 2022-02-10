@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { TimelineItem } from "./TimelineItem";
-import { Flex, Box } from "@chakra-ui/react";
+import { Flex, Box, Button } from "@chakra-ui/react";
 
 type Timeline = {
   id: string;
@@ -17,6 +17,7 @@ export type TimelinesProps = {
   patientAge?: number;
   patientOccupation?: string;
   timelines: Timeline[];
+  onAddTimelineClick: () => any
 };
 
 const extractVisitedPlaces = (timelines: Timeline[]) =>
@@ -42,15 +43,50 @@ export const Timelines: FC<TimelinesProps> = (props) => {
 
   return (
     <Box p="4">
+      <Box display="flex" alignItems={'center'} justifyContent="space-between">
+        <Box fontWeight={"semibold"} fontSize="xl">
+          Timelines
+        </Box>
+        <Button display={{ base: 'block', md: 'hidden' }} onClick={props.onAddTimelineClick}>+</Button>
+      </Box>
       <Flex flexDirection={"column"} alignItems={"center"}>
-        <Box textAlign={"center"} bgColor="yellow.300" p="3" textTransform={'capitalize'} borderRadius='md'>
-          <div>{props.patientGender}</div>
-          <div>{props.patientAge} years old</div>
-          <div>{props.patientOccupation}</div>
+        <Box
+          textAlign={"center"}
+          bgColor="yellow.300"
+          m="3"
+          p="3"
+          width={180}
+          textTransform={"capitalize"}
+          borderRadius="md"
+        >
+          <Box
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+            fontSize={"sm"}
+          >
+            {props.patientGender ? props.patientGender : "--"}
+          </Box>
+          <Box
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+            fontSize={"2xl"}
+          >
+            {props.patientAge ? props.patientAge : "-"} years old
+          </Box>
+          <Box
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+            fontSize={"sm"}
+          >
+            {props.patientOccupation ? props.patientOccupation : "--"}
+          </Box>
         </Box>
       </Flex>
 
-      <Box height={'30vh'} overflowY="scroll">
+      <Box height={"30vh"} overflowY="scroll">
         {dateGroupedTimelines.map(([date, timelines]) => (
           <div key={date}>
             <div>{date}</div>
@@ -70,10 +106,21 @@ export const Timelines: FC<TimelinesProps> = (props) => {
         ))}
       </Box>
       <Box>
-        <div>Visited Places</div>
-        {visitedPlaces.map((visitedPlace) => (
-          <span key={visitedPlace}>{visitedPlace}</span>
-        ))}
+        <Box fontWeight={"semibold"}>Visited Places</Box>
+        <Flex overflowX={"scroll"}>
+          {visitedPlaces.map((visitedPlace) => (
+            <Box
+              key={visitedPlace}
+              m="8px"
+              bg="gray.100"
+              borderRadius={"full"}
+              p="1"
+              my="2"
+            >
+              {visitedPlace}
+            </Box>
+          ))}
+        </Flex>
       </Box>
     </Box>
   );

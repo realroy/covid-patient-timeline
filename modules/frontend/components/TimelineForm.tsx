@@ -35,7 +35,6 @@ export const TimelineForm: FC<TimelineFormProps> = (props) => {
 
   const onSubmit = handleSubmit((data) => {
     data.to = data.from.replace(/\d{2}:\d{2}$/, data.to);
-    // data.to = new Date([data.from.toDateString(), data.to.toTimeString()].join(' '))
 
     props?.onSubmit?.(data);
   });
@@ -43,16 +42,16 @@ export const TimelineForm: FC<TimelineFormProps> = (props) => {
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <Grid templateColumns="4fr 2fr" columnGap={"16px"}>
+       <Box display={{ base: 'block', md: 'grid' }} gridTemplateColumns="4fr 2fr" columnGap={"16px"}>
           <div>
             <FormLabel htmlFor="">From</FormLabel>
-            <Input type="datetime-local" id="from" {...register("from")} />
+            <Input type="datetime-local" id="from" {...register("from", { required: true })} />
           </div>
           <div>
             <FormLabel htmlFor="">To</FormLabel>
-            <Input type="time" id="from" {...register("to", { min: new Date(watch('from')).toTimeString() })} />
+            <Input type="time" id="from" {...register("to", { min: new Date(watch('from')).toTimeString(), required: true })} />
           </div>
-        </Grid>
+        </Box>
 
         <FormLabel>Detail</FormLabel>
         <Textarea
@@ -62,7 +61,7 @@ export const TimelineForm: FC<TimelineFormProps> = (props) => {
           {...register("detail")}
         ></Textarea>
 
-        <Grid templateColumns="2fr 4fr" columnGap={"16px"}>
+        <Box display={{ base: 'block', md: 'grid' }} gridTemplateColumns="2fr 4fr" columnGap={"16px"}>
           <div>
             <FormLabel htmlFor="">Location Type</FormLabel>
             <Select id="location-type" {...register("locationType")} textTransform='capitalize'>
@@ -77,9 +76,9 @@ export const TimelineForm: FC<TimelineFormProps> = (props) => {
             <FormLabel htmlFor="">Location Name</FormLabel>
             <Input type="text" {...register("locationName")} />
           </div>
-        </Grid>
+        </Box>
         <Box height={'32px'} />
-        <Button type="submit" bg="teal" color="white">Add Entry +</Button>
+        <Button type="submit" bg="teal" color="white" width={{ base: '100%', md: 'auto' }} >Add Entry +</Button>
       </form>
     </div>
   );

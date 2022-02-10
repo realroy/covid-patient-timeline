@@ -1,5 +1,13 @@
-import { FC, MouseEventHandler } from "react";
-import { Box, Container, Tabs, Flex } from "@chakra-ui/react";
+import { FC, MouseEventHandler, useState } from "react";
+import {
+  Box,
+  Container,
+  Tabs,
+  Flex,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+} from "@chakra-ui/react";
 
 import {
   PatientForm,
@@ -54,8 +62,23 @@ export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
     });
   };
 
+  const [showTimelineModal, setShowTimelineModal] = useState(false);
+
   return (
     <Box as="main">
+      <Modal
+        isOpen={showTimelineModal}
+        onClose={() => setShowTimelineModal(false)}
+      >
+        <ModalOverlay />
+        <ModalContent p="2" mx="3">
+          <Box>Add Timeline</Box>
+          <TimelineForm
+            onSubmit={props?.onTimelineSubmit}
+            locationTypes={props.locationTypes ?? []}
+          />
+        </ModalContent>
+      </Modal>
       <Container maxW="container.xl">
         <Box textStyle={"h1"} fontSize="4xl" textAlign="center">
           Covid Tracker
@@ -75,7 +98,7 @@ export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
                 age={props.selectedPatient?.age}
                 occupation={props.selectedPatient?.occupation}
               />
-              <Flex flexDirection={{ base: 'column', md: 'row' }}>
+              <Flex flexDirection={{ base: "column", md: "row" }}>
                 <Box flex="1">
                   <Timelines
                     timelines={props.timelines ?? []}
@@ -83,9 +106,10 @@ export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
                     patientGender={props.selectedPatient?.gender}
                     patientOccupation={props.selectedPatient?.occupation}
                     onTimelineDelete={props?.onTimelineDelete}
+                    onAddTimelineClick={() => setShowTimelineModal(true)}
                   />
                 </Box>
-                <Box flex="1">
+                <Box flex="1" display={{ base: "none", md: "block" }}>
                   <TimelineForm
                     onSubmit={props?.onTimelineSubmit}
                     locationTypes={props.locationTypes ?? []}
