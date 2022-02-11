@@ -3,10 +3,9 @@ import type { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import { Component } from "react";
 
 const client = new ApolloClient({
-  uri: "http://localhost:3000/graphql",
+  uri: process.env.GRAPHQL_ENDPOINT,
   cache: new InMemoryCache(),
 });
 

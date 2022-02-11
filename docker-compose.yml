@@ -1,0 +1,25 @@
+version: '3'
+services:
+  backend:
+    build:
+      dockerfile: Dockerfile.backend
+    depends_on:
+      - db
+    env_file:
+      .env
+    ports:
+      - ${BACKEND_PORT}:3000
+  frontend:
+    build:
+      dockerfile: Dockerfile.frontend
+    depends_on:
+      - backend
+    ports:
+      - 3000:3000
+    env_file:
+      .env
+  db:
+    image: postgres:14-alpine
+    restart: always
+    env_file:
+      .env

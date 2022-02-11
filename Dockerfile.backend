@@ -1,0 +1,12 @@
+FROM node:16.13-alpine
+
+RUN apk add --no-cache git openssh
+
+WORKDIR /usr/app
+COPY . .
+
+RUN yarn install
+RUN yarn backend prisma generate
+RUN yarn backend build
+
+CMD ["yarn", "backend", "start:prod"]

@@ -100,7 +100,7 @@ export const TimelineForm: FC<TimelineFormProps> = (props) => {
               ))}
             </Select>
           </div>
-          <FormControl isInvalid={errors.locationName}>
+          <FormControl isInvalid={!!errors.locationName}>
             <FormLabel htmlFor="">Location Name</FormLabel>
             <Input
               type="text"
