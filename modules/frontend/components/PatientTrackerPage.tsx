@@ -7,6 +7,7 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
+  CloseButton,
 } from "@chakra-ui/react";
 
 import {
@@ -64,17 +65,30 @@ export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
 
   const [showTimelineModal, setShowTimelineModal] = useState(false);
 
+  const handleClose = () => setShowTimelineModal(false)
+
+  const handleTimelineModalSubmit = (data: TimelineFormData) => {
+    props?.onTimelineSubmit?.(data)
+    handleClose()
+  }
+
   return (
     <Box as="main">
       <Modal
         isOpen={showTimelineModal}
-        onClose={() => setShowTimelineModal(false)}
+        onClose={handleClose}
       >
         <ModalOverlay />
         <ModalContent p="2" mx="3">
-          <Box>Add Timeline</Box>
+          <Box display="flex" justifyContent={'space-between'}>
+            <Box></Box>
+            <Box fontWeight={"bolder"} textAlign="center" fontSize={"xl"}>
+              Add Timeline
+            </Box>
+            <CloseButton onClick={handleClose} />
+          </Box>
           <TimelineForm
-            onSubmit={props?.onTimelineSubmit}
+            onSubmit={handleTimelineModalSubmit}
             locationTypes={props.locationTypes ?? []}
           />
         </ModalContent>
@@ -99,7 +113,7 @@ export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
                 occupation={props.selectedPatient?.occupation}
               />
               <Flex flexDirection={{ base: "column", md: "row" }}>
-                <Box flex="1">
+                <Box flex="2">
                   <Timelines
                     timelines={props.timelines ?? []}
                     patientAge={props.selectedPatient?.age}

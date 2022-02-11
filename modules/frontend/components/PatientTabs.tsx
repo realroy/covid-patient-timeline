@@ -10,7 +10,7 @@ export type PatientTabsProps = {
 
 export const PatientTabs: FC<PatientTabsProps> = (props) => {
   return (
-    <Flex justifyContent={'space-between'} overflowX="scroll" overflowY={'hidden'}>
+    <Flex justifyContent={'space-between'} alignItems={'center'} overflowX="scroll" overflowY={'hidden'}>
       <TabList>
         {props.patients.map((patient, index: number) => (
           <Link key={patient.id} href={`/patients/${patient.id}`} passHref>
@@ -25,7 +25,7 @@ export const PatientTabs: FC<PatientTabsProps> = (props) => {
           </Link>
         ))}
       </TabList>
-      <Box>
+      <Box mr="4">
         <Button onClick={props.handleAddClick} sx={{ borderRadius: "100%" }}>
           +
         </Button>

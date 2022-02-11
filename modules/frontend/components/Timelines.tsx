@@ -1,6 +1,11 @@
 import { FC } from "react";
 import { TimelineItem } from "./TimelineItem";
-import { Flex, Box, Button } from "@chakra-ui/react";
+import { Flex, Box, Button, useMediaQuery, useTheme, useToken } from "@chakra-ui/react";
+import {
+  VerticalTimeline,
+  VerticalTimelineElement,
+} from "react-vertical-timeline-component";
+import "react-vertical-timeline-component/style.min.css";
 
 type Timeline = {
   id: string;
@@ -17,7 +22,7 @@ export type TimelinesProps = {
   patientAge?: number;
   patientOccupation?: string;
   timelines: Timeline[];
-  onAddTimelineClick: () => any
+  onAddTimelineClick: () => any;
 };
 
 const extractVisitedPlaces = (timelines: Timeline[]) =>
@@ -27,27 +32,29 @@ const extractVisitedPlaces = (timelines: Timeline[]) =>
 
 export const Timelines: FC<TimelinesProps> = (props) => {
   const visitedPlaces = extractVisitedPlaces(props.timelines);
-
+  const [gray200] = useToken('colors', ['gray.200'])
   const dates = [
     // @ts-ignore
-    ...new Set(
-      props.timelines.map((timeline) => new Date(timeline.from).toDateString())
+    ...new Set<String>(
+      props.timelines.map((timeline) => new Date(timeline.from).toLocaleDateString('en-GB'))
     ),
   ];
   const dateGroupedTimelines = dates.map((date) => [
     date,
     props.timelines.filter(
-      (timeline) => new Date(timeline.from).toDateString() === date
+      (timeline) => new Date(timeline.from).toLocaleDateString('en-GB') === date
     ),
   ]);
 
+  const [isNotMobile] = useMediaQuery("(min-width: 720px)");
+
   return (
     <Box p="4">
-      <Box display="flex" alignItems={'center'} justifyContent="space-between">
+      <Box display="flex" alignItems={"center"} justifyContent="space-between">
         <Box fontWeight={"semibold"} fontSize="xl">
           Timelines
         </Box>
-        <Button display={{ base: 'block', md: 'hidden' }} onClick={props.onAddTimelineClick}>+</Button>
+        {!isNotMobile && <Button onClick={props.onAddTimelineClick}>+</Button>}
       </Box>
       <Flex flexDirection={"column"} alignItems={"center"}>
         <Box
@@ -86,24 +93,38 @@ export const Timelines: FC<TimelinesProps> = (props) => {
         </Box>
       </Flex>
 
-      <Box height={"30vh"} overflowY="scroll">
-        {dateGroupedTimelines.map(([date, timelines]) => (
-          <div key={date}>
-            <div>{date}</div>
-            {timelines.map((timeline: Timeline) => (
-              <TimelineItem
-                key={timeline.id}
-                from={timeline.from}
-                to={timeline.to}
-                locationName={timeline.locationName}
-                locationType={timeline.locationType}
-                detail={timeline.detail}
-                timelineId={timeline.id}
-                onDeleteClick={props?.onTimelineDelete}
-              />
-            ))}
-          </div>
-        ))}
+      <Box height={"30vh"} overflowY="scroll" bgColor={'gray.100'} borderRadius="4px">
+        <VerticalTimeline>
+          {dateGroupedTimelines.map(([date, timelines]) => (
+            <VerticalTimelineElement
+              key={date}
+              iconStyle={{
+                boxShadow: 'none',
+                background: gray200,
+                color: "#fff",
+              }}
+              date={date}
+              contentStyle={{ background: gray200, boxShadow: 'none' }}
+              contentArrowStyle={{
+                borderRight: `7px solid ${gray200}`,
+              }}
+              className="vertical-timeline-element--work"
+            >
+              {timelines.map((timeline: Timeline) => (
+                <TimelineItem
+                  key={timeline.id}
+                  from={timeline.from}
+                  to={timeline.to}
+                  locationName={timeline.locationName}
+                  locationType={timeline.locationType}
+                  detail={timeline.detail}
+                  timelineId={timeline.id}
+                  onDeleteClick={props?.onTimelineDelete}
+                />
+              ))}
+            </VerticalTimelineElement>
+          ))}
+        </VerticalTimeline>
       </Box>
       <Box>
         <Box fontWeight={"semibold"}>Visited Places</Box>
