@@ -8,6 +8,7 @@ import {
   Input,
   FormLabel,
   FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 
 export type PatientFormData = {
@@ -42,6 +43,8 @@ export const PatientForm: FC<PatientFormProps> = (props) => {
     setValue("age", age);
   }, [patientId, gender, occupation, age, patientId, setValue]);
 
+  console.log(errors)
+
   return (
     <Box p="2">
       <Flex alignItems={"center"} justifyContent="space-between">
@@ -64,7 +67,7 @@ export const PatientForm: FC<PatientFormProps> = (props) => {
           gap="8px"
           py="16px"
         >
-          <FormControl>
+          <FormControl isInvalid={!!errors.gender}>
             <FormLabel>Gender</FormLabel>
             <Select id="gender" {...register("gender", { required: true })}>
               <option value="">Select Gender</option>
@@ -72,6 +75,9 @@ export const PatientForm: FC<PatientFormProps> = (props) => {
               <option value="female">Female</option>
               <option value="prefer-not-to-say">Prefer not to say</option>
             </Select>
+            {!!errors.gender && (
+              <FormErrorMessage>Gender is required.</FormErrorMessage>
+            )}
           </FormControl>
           <FormControl>
             <FormLabel>Age</FormLabel>
@@ -80,14 +86,20 @@ export const PatientForm: FC<PatientFormProps> = (props) => {
               id="age"
               {...register("age", { required: true, min: 0 })}
             />
+             {errors.age && (
+              <FormErrorMessage>Age is required.</FormErrorMessage>
+            )}
           </FormControl>
-          <FormControl>
+          <FormControl isInvalid={!!errors.occupation}>
             <FormLabel htmlFor="occupation">Occupation</FormLabel>
             <Input
               type="text"
               id="occupation"
               {...register("occupation", { required: true, minLength: 1 })}
             />
+             {!!errors.occupation && (
+              <FormErrorMessage>Occupation is required.</FormErrorMessage>
+            )}
           </FormControl>
         </Box>
         <Button type="submit">Update</Button>
