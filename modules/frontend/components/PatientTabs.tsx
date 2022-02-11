@@ -4,13 +4,17 @@ import { TabList, Tab, Box, Button, Flex } from "@chakra-ui/react";
 
 export type PatientTabsProps = {
   patients: { id: string }[];
-  
   handleAddClick: MouseEventHandler<HTMLButtonElement>;
 };
 
 export const PatientTabs: FC<PatientTabsProps> = (props) => {
   return (
-    <Flex justifyContent={'space-between'} alignItems={'center'} overflowX="scroll" overflowY={'hidden'}>
+    <Flex
+      justifyContent={"space-between"}
+      alignItems={"center"}
+      overflowX="scroll"
+      overflowY={"hidden"}
+    >
       <TabList>
         {props.patients.map((patient, index: number) => (
           <Link key={patient.id} href={`/patients/${patient.id}`} passHref>
@@ -18,7 +22,9 @@ export const PatientTabs: FC<PatientTabsProps> = (props) => {
               <Tab>
                 <Box>
                   <Box fontSize="xs">Patient</Box>
-                  <Box fontWeight={600} fontSize="2xl">{index + 1}</Box>
+                  <Box fontWeight={600} fontSize="2xl">
+                    {index + 1}
+                  </Box>
                 </Box>
               </Tab>
             </a>

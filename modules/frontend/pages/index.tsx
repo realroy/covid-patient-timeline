@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 import { PatientTrackerPage } from "../components";
 import { usePatientMutation, usePatientsQuery } from "../hooks";
@@ -7,12 +8,18 @@ import { usePatientMutation, usePatientsQuery } from "../hooks";
 const Home: NextPage = () => {
   const patientsQuery = usePatientsQuery();
   const { patients = [] } = patientsQuery.data ?? {};
+
   const { addPatient } = usePatientMutation();
 
   const handleAddPatient = async (data: any) => {
     await addPatient(data);
     await patientsQuery.refetch();
   };
+
+  const router = useRouter()
+  if (patients?.length) {
+    router.push(`/patients/${patients[0].id}`)
+  }
 
   return (
     <div>

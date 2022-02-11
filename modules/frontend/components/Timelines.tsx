@@ -49,9 +49,9 @@ export const Timelines: FC<TimelinesProps> = (props) => {
   const [isNotMobile] = useMediaQuery("(min-width: 720px)");
 
   return (
-    <Box p="4">
+    <Box m="4" bgColor={'gray.100'} borderRadius="4px">
       <Box display="flex" alignItems={"center"} justifyContent="space-between">
-        <Box fontWeight={"semibold"} fontSize="xl">
+        <Box fontWeight={"semibold"} fontSize="xl" p="2">
           Timelines
         </Box>
         {!isNotMobile && <Button onClick={props.onAddTimelineClick}>+</Button>}
@@ -93,7 +93,7 @@ export const Timelines: FC<TimelinesProps> = (props) => {
         </Box>
       </Flex>
 
-      <Box height={"30vh"} overflowY="scroll" bgColor={'gray.100'} borderRadius="4px">
+      <Box height={"30vh"} overflowY="scroll">
         <VerticalTimeline>
           {dateGroupedTimelines.map(([date, timelines]) => (
             <VerticalTimelineElement
@@ -126,7 +126,7 @@ export const Timelines: FC<TimelinesProps> = (props) => {
           ))}
         </VerticalTimeline>
       </Box>
-      <Box>
+      <Box bg="white">
         <Box fontWeight={"semibold"}>Visited Places</Box>
         <Flex overflowX={"scroll"}>
           {visitedPlaces.map((visitedPlace) => (

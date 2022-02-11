@@ -28,6 +28,8 @@ const PatientDetailNextPage: NextPage = (props) => {
   const { timelines = [] } = timelineQuery.data ?? {}
   const { locationTypes } = locationTypesQuery.data ?? {}
 
+  const selectedIndex = patients.findIndex(({ id }: { id: string }) => id === router.query?.id)
+  
   const handleAddPatient = async (data: any) => {
     await addPatient(data);
     await patientsQuery.refetch();
@@ -68,6 +70,7 @@ const PatientDetailNextPage: NextPage = (props) => {
       </Head>
 
       <PatientTrackerPage
+        selectedIndex={selectedIndex}
         patients={patients}
         selectedPatient={selectedPatient}
         addPatient={handleAddPatient}

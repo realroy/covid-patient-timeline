@@ -8,6 +8,7 @@ import {
   ModalOverlay,
   ModalContent,
   CloseButton,
+  useToast,
 } from "@chakra-ui/react";
 
 import {
@@ -34,11 +35,29 @@ export type PatientTrackerPageProps = {
   onTimelineSubmit?: (data: TimelineFormData) => any;
   locationTypes?: [string, string][] | null;
   timelines?: any[] | null;
+  selectedIndex?: number;
 };
 
 export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
+  const toast = useToast();
+
   const handleAddPatientClick: MouseEventHandler = async (e) => {
-    await props.addPatient({ data: { gender: "", age: 0, occupation: "" } });
+    try {
+      await props.addPatient({ data: { gender: "", age: 0, occupation: "" } });
+      toast({
+        title: "Add patient successfully",
+        status: "success",
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: "Something went wrong!",
+        description: (error as Error)?.message ?? "",
+        status: "error",
+        isClosable: true,
+      });
+    }
+
     e.preventDefault();
   };
 
@@ -50,7 +69,21 @@ export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
     const { patientId } = dataset;
 
     if (patientId) {
-      await props.deletePatient?.({ id: patientId });
+      try {
+        await props.deletePatient?.({ id: patientId });
+        toast({
+          title: "Remove patient successfully",
+          status: "success",
+          isClosable: true,
+        });
+      } catch (error) {
+        toast({
+          title: "Something went wrong!",
+          description: (error as Error)?.message ?? "",
+          status: "error",
+          isClosable: true,
+        });
+      }
     }
 
     e.preventDefault();
@@ -58,29 +91,57 @@ export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
 
   const onPatientInfoSubmit = async (data: any) => {
     const { id } = props.selectedPatient ?? {};
-    await props.updatePatient?.({
-      data: { ...data, age: parseInt(data.age, 10), id: id },
-    });
+    try {
+      await props.updatePatient?.({
+        data: { ...data, age: parseInt(data.age, 10), id: id },
+      });
+      toast({
+        title: "Update patient successfully",
+        status: "success",
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: "Something went wrong!",
+        description: (error as Error)?.message ?? "",
+        status: "error",
+        isClosable: true,
+      });
+    }
   };
 
   const [showTimelineModal, setShowTimelineModal] = useState(false);
 
-  const handleClose = () => setShowTimelineModal(false)
+  const handleClose = () => setShowTimelineModal(false);
 
+  const handleTimelineSubmit = async (data: TimelineFormData) => {
+    try {
+      await props?.onTimelineSubmit?.(data);
+      toast({
+        title: "Submit timeline successfully",
+        status: "success",
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: "Something went wrong!",
+        description: (error as Error)?.message ?? "",
+        status: "error",
+        isClosable: true,
+      });
+    }
+  };
   const handleTimelineModalSubmit = (data: TimelineFormData) => {
-    props?.onTimelineSubmit?.(data)
-    handleClose()
-  }
+    handleTimelineSubmit(data)
+    handleClose();
+  };
 
   return (
     <Box as="main">
-      <Modal
-        isOpen={showTimelineModal}
-        onClose={handleClose}
-      >
+      <Modal isOpen={showTimelineModal} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent p="2" mx="3">
-          <Box display="flex" justifyContent={'space-between'}>
+          <Box display="flex" justifyContent={"space-between"}>
             <Box></Box>
             <Box fontWeight={"bolder"} textAlign="center" fontSize={"xl"}>
               Add Timeline
@@ -97,7 +158,7 @@ export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
         <Box textStyle={"h1"} fontSize="4xl" textAlign="center">
           Covid Tracker
         </Box>
-        <Tabs variant="enclosed" isFitted>
+        <Tabs variant="enclosed" isFitted index={props.selectedIndex}>
           <PatientTabs
             patients={props.patients}
             handleAddClick={handleAddPatientClick}
@@ -125,7 +186,7 @@ export const PatientTrackerPage: FC<PatientTrackerPageProps> = (props) => {
                 </Box>
                 <Box flex="1" display={{ base: "none", md: "block" }}>
                   <TimelineForm
-                    onSubmit={props?.onTimelineSubmit}
+                    onSubmit={handleTimelineSubmit}
                     locationTypes={props.locationTypes ?? []}
                   />
                 </Box>
