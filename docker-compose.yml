@@ -2,6 +2,7 @@ version: '3'
 services:
   backend:
     build:
+      context: .
       dockerfile: Dockerfile.backend
     depends_on:
       - db
@@ -11,6 +12,7 @@ services:
       - ${BACKEND_PORT}:3000
   frontend:
     build:
+      context: .
       dockerfile: Dockerfile.frontend
     depends_on:
       - backend
